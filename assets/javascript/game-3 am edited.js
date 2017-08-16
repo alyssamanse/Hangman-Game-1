@@ -36,15 +36,24 @@ var lettersGuessed = [];
 			blankWord = phrase[Math.floor(Math.random() * phrase.length)];
 			console.log(blankWord);
 			answerSpaces = [];
+
 			for (var i = 0; i < blankWord.length; i++) {
 					answerSpaces[i] = "_";
 				}
 				console.log(answerSpaces);
+			// ADDED TO DISPLAY ANSWER SPACES, LETTERS GUESSED AND GUESSES BEFORE USER CHOOSES FIRST LETTER
+			// JOINED ANSWER SPACES AND LETTERS GUESSED TO REMOVE COMMAS
+			document.getElementById("spaces").innerHTML = answerSpaces.join(" ");
+			document.getElementById("letter-choice").innerHTML = lettersGuessed.join(" ");
+			document.getElementById("count").innerHTML = guesses;
 			letters = blankWord.length;
 			console.log(letters);
 			lettersGuessed = [];
 	};
 //};
+
+// ADDED TO START NEW GAME BEFORE ONKEYUP
+newGame();
 
 // Checking to see if the User's guess matches alphabet, then a valid letter in the phrase.
 //var playGame = {
@@ -59,8 +68,10 @@ var lettersGuessed = [];
 		        		console.log(userGuess);
 		        		lettersGuessed.push(userGuess);
 		        		console.log(lettersGuessed);
-		        		document.getElementById("letter-choice").innerHTML = lettersGuessed;
-		        		guesses--;
+		        		// JOINED LETTERS GUESSED TO REMOVE COMMAS
+		        		document.getElementById("letter-choice").innerHTML = lettersGuessed.join(" ");
+		        		// REMOVED SO COUNT DOESN'T DECREASE FOR CORRECT LETTER CHOICES
+		        		// guesses--;
 		        		console.log(guesses);
 		        		document.getElementById("count").innerHTML = guesses;
 		        		alphabet.splice(alphabet.indexOf(userGuess), 1);		
@@ -71,7 +82,8 @@ var lettersGuessed = [];
 								    		answerSpaces[j] = userGuess;
 								    		letters--;
 								    		console.log(answerSpaces);
-								    		document.getElementById("spaces").innerHTML = answerSpaces;
+								    		// ADDED TO REMOVE COMMAS FROM ANSWER SPACES
+								    		document.getElementById("spaces").innerHTML = answerSpaces.join(" ");
 								    		console.log(letters);
 							    		}
 						    		}
@@ -113,9 +125,72 @@ var lettersGuessed = [];
 //};
 
 //document.onkeyup = function(event) {
-//		console.log(blankWord);
 //		document.getElementById("spaces").innerHTML = answerSpaces;
 //		document.getElementById("count").innerHTML = guesses;
 //		playGame.matching();
 //};
+
+/* 	In this version, there is an issue with correctly decreasing the guesses count.
+   	I think you may need something like a checker that checks if the user's guess
+ 	is in your hangman word and if it is a valid letter of the alphabet.
+ 	If your checker returns a true boolean, then you can create an if else statement
+ 	so that true adds the letter to your blank word and false decreases a guess
+
+ 	You already have most of this written but I think if it were nested in another 
+
+ 	Here is my checker that my tutor helped me with:
+
+ 		// Set to false initially before checking the userGuess letter against the word and alphabet
+		var checker = false;
+		var valid = false;
+
+		// checks if the userGuess is a valid letter
+		function validate() {
+
+			var alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+
+			for (var i = 0; i < guessedLetters.length; i++) {
+
+				if (userGuess === guessedLetters[i] || userGuess === blankWord[i]) {
+					alert("You've already tried " + userGuess + ". Try again!");
+					return;
+				} 
+			}
+
+			for (var j = 0; j < alphabet.length; j++) {
+				if (userGuess === alphabet[j]) {
+					valid = true;
+				}
+			}
+		}
+
+		validate();
+
+		// Checks if the userGuess letter is in the hangmanWord
+		for (var i = 0; i < wordLength; i++) {
+
+			if (userGuess === hangmanWordLetters[i]) {
+				checker = true;
+			} 
+		}
+
+		// If the letter is in the hangmanWord, then that letter is inserted into the correct index(es)
+		if (checker) {
+
+			for (var i = 0; i < wordLength; i++) {
+
+				if (userGuess === hangmanWordLetters[i]) {
+					blankWord[i] = userGuess;
+					currentWord.innerHTML = "<h1> " + blankWord + " </h1>";
+					currentWord.innerHTML = "<h1> " + blankWord.join(" ") + "</h1>";
+				} 
+			}
+		} else if (valid) {
+			guessedLetters.push(userGuess);
+			lives--;
+			guessesRemaining.innerHTML = "<h2> " + lives + "</h2>";
+			lettersGuessed.innerHTML = "<h2> " + guessedLetters.join(" ") + "</h2>";
+		} 	
+
+*/
 
